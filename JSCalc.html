@@ -91,33 +91,40 @@ var a;
 var b;
 var calculation = [];
 $(".num").click(function(){
-    if (calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
+  // console.log(calculation[calculation.length - 1])
+    if (calculation[calculation.length] === undefined || calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
         $("#display").text(" ");
     }
+    if (calculation[calculation.length -1 ] === "=") {
+      calculation = [];
+    }
       var value = $(this).data("num");
-      console.log($("#display").text());
+      // console.log($("#display").text());
       if ($("#display").text() === "0") {
         $("#display").text("");
       }
       display.append(value);
       value = $(this).data("num");
-      console.log(value);
+      // console.log(value);
       calculation.push(value);
 });
 
 $("#decimal").click(function(){
-    if (calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
+    if (calculation[calculation.length] === undefined || calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation === []) {
         $("#display").text(" ");
     }
+    if (calculation[calculation.length -1 ] === "=") {
+      calculation = [];
+    }
       var value = $(this).data("num");
-      console.log($("#display").text());
+      // console.log($("#display").text());
           console.log(calculation);
         if (calculation.includes(".")) {
             value = "";
          }
       display.append(value);
       value = $(this).data("num");
-      console.log(value);
+      // console.log(value);
       calculation.push(value);
 });
 
@@ -148,13 +155,15 @@ function hasDecimal(num){
 }
 
 $("#equals").click(function() {
-    console.log(hasDecimal(eval(calculation.join(''))));
+  console.log(calculation);
+    // console.log(hasDecimal(eval(calculation.join(''))));
     if (hasDecimal(eval(calculation.join('')))) {
         $("#display").text(eval(calculation.join('')).toFixed(5));
     }
     else if (!hasDecimal(eval(calculation.join('')))) {
         $("#display").text(eval(calculation.join('')));
     }
+  calculation.push("=");
 });
 
 </script>
