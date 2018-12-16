@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=ZCOOL+QingKe+HuangYou" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <!-- <script src="main.js"></script> -->
+</head>
+<body>
+<style>
+body {
+    background-color: oldlace;
+}
+.calculator {
+  left: auto;
+  right: auto;
+  margin: 5% 35%;
+  background-color: #afc0ff;
+  padding: 10px;
+  border-radius: 30px;
+  border: 8px solid hotpink;
+}
+#display {
+  background-color: #36383f;
+  color: limegreen;
+  font-family: 'ZCOOL QingKe HuangYou', cursive;
+  font-size: 40px;
+  margin: 5px;
+  text-align: right;
+  padding: 2px;
+  border-radius: 10px;
+  opacity: .8;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+.grid-item {
+  color: hotpink;
+  text-align: center;
+  padding: 10px;
+  font-size: 30px;
+  font-weight: bolder;
+  border-radius: 25px;
+  background-color: lightgray;
+  opacity: .8;
+  border: 1px solid darkgray;
+  box-shadow: 2px 2px darkgray;
+}
+#zero, #clear {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+#equals {
+  grid-column-start: 3;
+  grid-column-end: 5;
+}
+.grid-item:hover {
+  opacity: 1;
+  box-shadow: none;
+}
+</style>
+<div class="calculator">
+  <div id="display">0</div>
+<div class="grid-container">
+  <div class="grid-item num" id="seven" data-num="7">7</div>
+  <div class="grid-item num" id="eight" data-num="8">8</div>
+  <div class="grid-item num" id="nine" data-num="9">9</div>
+  <div class="grid-item" id="divide">/</div>
+  <div class="grid-item num" id="four" data-num="4">4</div>
+  <div class="grid-item num" id="five" data-num="5">5</div>
+  <div class="grid-item num" id="six" data-num="6">6</div>
+  <div class="grid-item" id="multiply">x</div>
+  <div class="grid-item num" id="one" data-num="1">1</div>
+  <div class="grid-item num" id="two" data-num="2">2</div>
+  <div class="grid-item num" id="three" data-num="3">3</div>
+  <div class="grid-item" id="subtract">-</div>
+  <div class="grid-item num" id="zero" data-num="0">0</div>
+  <div class="grid-item" id="decimal" data-num=".">.</div>
+  <div class="grid-item" id="add">+</div>
+  <div class="grid-item" id="clear">c</div>
+  <div class="grid-item" id="equals">=</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var a;
+var b;
+var calculation = [];
+$(".num").click(function(){
+    if (calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
+        $("#display").text(" ");
+    }
+      var value = $(this).data("num");
+      console.log($("#display").text());
+      if ($("#display").text() === "0") {
+        $("#display").text("");
+      }
+      display.append(value);
+      value = $(this).data("num");
+      console.log(value);
+      calculation.push(value);
+});
+
+$("#decimal").click(function(){
+    if (calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
+        $("#display").text(" ");
+    }
+      var value = $(this).data("num");
+      console.log($("#display").text());
+          console.log(calculation);
+        if (calculation.includes(".")) {
+            value = "";
+         }
+      display.append(value);
+      value = $(this).data("num");
+      console.log(value);
+      calculation.push(value);
+});
+
+$("#clear").click(function(){
+      $("#display").text("");
+      $("#display").text("0");
+      calculation = [];
+});
+
+$("#divide").click(function(){
+    calculation.push("/");
+});
+
+$("#multiply").click(function(){
+      calculation.push("*");
+});
+
+$("#add").click(function(){
+      calculation.push("+");
+});
+
+$("#subtract").click(function(){
+      calculation.push("-");
+});
+
+function hasDecimal(num){
+    return !!(num % 1);
+}
+
+$("#equals").click(function() {
+    console.log(hasDecimal(eval(calculation.join(''))));
+    if (hasDecimal(eval(calculation.join('')))) {
+        $("#display").text(eval(calculation.join('')).toFixed(5));
+    }
+    else if (!hasDecimal(eval(calculation.join('')))) {
+        $("#display").text(eval(calculation.join('')));
+    }
+});
+
+</script>
+</body>
+</html>
