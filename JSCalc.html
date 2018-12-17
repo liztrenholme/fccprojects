@@ -78,7 +78,7 @@ body {
   <div class="grid-item num" id="two" data-num="2">2</div>
   <div class="grid-item num" id="three" data-num="3">3</div>
   <div class="grid-item" id="subtract">-</div>
-  <div class="grid-item num" id="zero" data-num="0">0</div>
+  <div class="grid-item" id="zero" data-num="0">0</div>
   <div class="grid-item" id="decimal" data-num=".">.</div>
   <div class="grid-item" id="add">+</div>
   <div class="grid-item" id="clear">c</div>
@@ -87,34 +87,53 @@ body {
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-var a;
-var b;
 var calculation = [];
+var equalPressed = false;
 $(".num").click(function(){
-  // console.log(calculation[calculation.length - 1])
-    if (calculation[calculation.length] === undefined || calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
+  // if ($("#display").text() === "0") {
+  //       $("#display").text("");
+  //     }
+    if (calculation[calculation.length - 1] === undefined || 
+        calculation[calculation.length - 1] === "/" || 
+        calculation[calculation.length - 1] === "*" || 
+        calculation[calculation.length - 1] === "-" || 
+        calculation[calculation.length - 1] === "+") {
+      console.log(calculation[calculation.length - 1]);
+      console.log(calculation);
         $("#display").text(" ");
     }
-    if (calculation[calculation.length -1 ] === "=") {
+    if (equalPressed === true) {
       calculation = [];
+      $("#display").text(" ");
     }
-      var value = $(this).data("num");
-      // console.log($("#display").text());
-      if ($("#display").text() === "0") {
-        $("#display").text("");
-      }
+
+    var zeroFinder = /^0+/g;
+    if (zeroFinder.test($("#display").text()) === true) {
+      $("#display").text("0");
+    }
+    else {
+    var value = $(this).data("num");
       display.append(value);
-      value = $(this).data("num");
-      // console.log(value);
+      
+      console.log($("#display").text());
       calculation.push(value);
+  }
+
+      // var value = $(this).data("num");
+      // display.append(value);
+      
+      // console.log($("#display").text());
+      // calculation.push(value);
+      equalPressed = false;
 });
 
 $("#decimal").click(function(){
-    if (calculation[calculation.length] === undefined || calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation === []) {
+    if (calculation[calculation.length - 1] === undefined || calculation[calculation.length - 1] === "/" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+") {
         $("#display").text(" ");
     }
-    if (calculation[calculation.length -1 ] === "=") {
+    if (equalPressed === true) {
       calculation = [];
+      $("#display").text(" ");
     }
       var value = $(this).data("num");
       // console.log($("#display").text());
@@ -124,8 +143,39 @@ $("#decimal").click(function(){
          }
       display.append(value);
       value = $(this).data("num");
-      // console.log(value);
       calculation.push(value);
+      equalPressed = false;
+});
+
+$("#zero").click(function(){
+  if (calculation[calculation.length - 1] === undefined || 
+      calculation[calculation.length - 1] === "/" || 
+      calculation[calculation.length - 1] === "*" || 
+      calculation[calculation.length - 1] === "-" || 
+      calculation[calculation.length - 1] === "+") {
+      console.log(calculation[calculation.length - 1]);
+      console.log(calculation);
+        $("#display").text("0");
+    }
+    if (equalPressed === true) {
+      calculation = [];
+      $("#display").text("0");
+    }
+  // var zeroFinder = /^0+/g;
+  // if (zeroFinder.test($("#display").text()) === true) {
+  //   $("#display").text("0");
+  // }
+  // else {
+  //   var value = $(this).data("num");
+  //     display.append(value);
+      
+  //     console.log($("#display").text());
+  //     calculation.push(value);
+  // }
+  equalPressed = false;
+  // console.log(zeroFinder.test($("#display").text()));
+  // console.log($("#display").text().match(zeroFinder));
+  // console.log(typeof($("#display").text()));
 });
 
 $("#clear").click(function(){
@@ -135,19 +185,35 @@ $("#clear").click(function(){
 });
 
 $("#divide").click(function(){
+  if (calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "/") {
+    calculation.pop();
+  }
     calculation.push("/");
+    equalPressed = false;
 });
 
 $("#multiply").click(function(){
+  if (calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "/") {
+    calculation.pop();
+  }
       calculation.push("*");
+      equalPressed = false;
 });
 
 $("#add").click(function(){
+  if (calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "/") {
+    calculation.pop();
+  }
       calculation.push("+");
+      equalPressed = false;
 });
 
 $("#subtract").click(function(){
+  if (calculation[calculation.length - 1] === "-" || calculation[calculation.length - 1] === "+" || calculation[calculation.length - 1] === "*" || calculation[calculation.length - 1] === "/") {
+    calculation.pop();
+  }
       calculation.push("-");
+      equalPressed = false;
 });
 
 function hasDecimal(num){
@@ -156,14 +222,27 @@ function hasDecimal(num){
 
 $("#equals").click(function() {
   console.log(calculation);
-    // console.log(hasDecimal(eval(calculation.join(''))));
-    if (hasDecimal(eval(calculation.join('')))) {
-        $("#display").text(eval(calculation.join('')).toFixed(5));
+  equalPressed = true;
+  var zeroFinder = /[0]+$/;
+// if (zeroFinder.test($("#display").text()) === true) {
+      
+    // }
+ var result = eval(calculation.join(''));
+// if (result.endsWith(/[0]+$/) === true) {
+//     console.log("zeros found");
+//   }
+var str = "9800";
+var whyyy = str.endsWith("0");
+console.log(whyyy);
+
+ console.log(zeroFinder.test(result));
+    if (hasDecimal(result)) {
+        $("#display").text(result);
     }
     else if (!hasDecimal(eval(calculation.join('')))) {
         $("#display").text(eval(calculation.join('')));
     }
-  calculation.push("=");
+    console.log(calculation.join(''));
 });
 
 </script>
